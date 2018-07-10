@@ -1,0 +1,112 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1370px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1570px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .container {
+        max-width: 1770px;
+    }
+}
+
+@media (min-width: 2000px) {
+    .container {
+        max-width: 1970px;
+    }
+}
+
+@media (min-width: 2400px) {
+    .container {
+        max-width: 2370px;
+    }
+}
+
+.container {
+    min-width: 1370px;
+}
+.my-sub-panel {
+    margin-top: 5px;
+}
+.my-panel {
+    margin-top: 40px;
+}
+
+.my-panel-heading {
+    color: white;
+    padding: 10px; 
+    display: inline-block;
+    -ms-border-radius: 8px 8px 0 0;
+    border-radius: 8px 8px 0 0;
+    color: #555555;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-bottom: 0;
+}
+
+.my-panel-seg {
+    margin: 0;
+    color: #dddddd;
+    border: 0;
+    border-top: 1px solid #dddddd;
+}
+
+.my-dropdown-menu-li-item {
+    padding: 5px;
+}
+
+.slider-label {
+    float: left;
+    margin-left: 10px;
+    fill: #464646;
+}
+
+.edge-weight-slider {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.year-range-slider {
+    margin-left: 5px;
+    margin-right: 20px;
+}
+
+.my-search-seg {
+    margin: 1px 0 0 0;
+    margin-top: 10px;
+    color: #dddddd;
+    border: 0;
+    border-top: 1px solid #dddddd;
+}
+
+.search_box {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+a {
+   color: #555555;
+}
