@@ -8,7 +8,6 @@ var preprocess_data_for_info = function (papermeta) {
 };
 var preprocess_data_for_facet = function (treelist) {
 };
-// this is a test
 var find_tree_size = function(tree){
     var size = 0;
     if (!("children" in tree))
