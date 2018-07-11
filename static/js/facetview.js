@@ -30,13 +30,26 @@ var facet = function (data, container) {
                            .attr("y", title_displacement_y)
                            .text(TreeList[i]['name'])
                            .attr('font-size', title_font_size)
-                           .attr('fill', CategoryColor[i]);
+                           .attr('fill', CategoryColor[i])
+                           .data([tree]);
+               taxo_group.select('text').on('click', clickOnTitle);
                for(var j = 0; j < size_array.length; j++)
                {
                  var h = (total_h - (size_array.length - 1) * h_line_space) * size_array[j] / sum;
                  if (h > 0)
                  {
-                     var g = taxo_group.data([tree['children'][j]]).append('g').attr('class', 'node').attr('id',  taxo_name + '-' + tree['children'][j].name);
+                     var is_taxo_group_in_anchored_list = 0;
+                     for(var k = 0; k < anchored_list.length; k++)
+                     {
+                         if(!anchored_list[k]['name'].localeCompare(tree['children'][j].name)){
+                             is_taxo_group_in_anchored_list = 1;
+                             break;
+                         }
+                     }
+                     var g = taxo_group.data([tree['children'][j]]).append('g')
+                         .attr('class', 'node')
+                         .attr('id',  taxo_name + '-' + tree['children'][j].name)
+                         .style('opacity', is_taxo_group_in_anchored_list ? high_opacity: low_opacity);
                      g.append('rect')
                          .attr('x', x)
                          .attr('y', y)

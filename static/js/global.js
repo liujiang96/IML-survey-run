@@ -59,6 +59,10 @@ var title_displacement_x =  total_w / 8;
 var title_displacement_y = h_line_space + 4;
 var title_font_size = '15px';
 var name_font = '10px';
+var low_opacity = 0.35;
+var high_opacity = 1;
+var is_anchoring = 0;
+var anchored_list = [];
 
 // event view
 var event_init_x = global_x;

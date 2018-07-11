@@ -17,6 +17,7 @@ var drill_down_facet = function(d){
     var sum = size_array.reduce(function(a, b) { return a + b; }, 0);
     var root = d3.select(this).attr('id').split('-')[0];
     var taxo_group = d3.select('#' + root);
+    taxo_group.selectAll('.node').transition().duration(300).style('opacity', 0);
     taxo_group.selectAll('.node').remove();
     total_h_local -= (size_array.length - 1) * h_line_space_second;
     for(var i = 0; i < n_child; i++)
@@ -38,6 +39,15 @@ var drill_down_facet = function(d){
                  .attr("x", x + total_w / 8)
                  .attr("y", y + h / 2)
                  .text(name_array[i]).attr('font-size', name_font).attr('fill', 'white');
+             var is_taxo_group_in_anchored_list = 0;
+             for(var k = 0; k < anchored_list.length; k++)
+             {
+                 if(!anchored_list[k]['name'].localeCompare(name_array[i])){
+                     is_taxo_group_in_anchored_list = 1;
+                     break;
+                 }
+             }
+             g.transition().duration(200).style('opacity', is_taxo_group_in_anchored_list ? high_opacity: low_opacity);
              y += (h + h_line_space_second);
              g.on("mouseover", hover_over_facet).on("mouseleave", hover_leave_facet);
              var cc = clickcancel();
@@ -75,20 +85,47 @@ var drill_down_facet = function(d){
     event_x += EventList.select('#e' + event_id.toString()).node().getBBox().width;
 };
 var hover_over_facet = function(d){
-    d3.select('#block-1-2').select('svg').selectAll('.node').transition().duration(300).style('opacity', 0.35);
-    d3.select(this).transition().duration(200).style("opacity", 1);
+    if(!is_anchoring)
+    {
+        d3.select('#block-1-2').select('svg').selectAll('.node').transition().duration(300).style('opacity', low_opacity);
+        d3.select(this).transition().duration(200).style("opacity", high_opacity);
     // todo: add propostions in other rects
+    }
 };
 var hover_leave_facet = function(d){
-    d3.select('#block-1-2').select('svg').selectAll('g').transition().duration(300).style('opacity', 1);
+    if(!is_anchoring){
+            d3.select('#block-1-2').select('svg').selectAll('g').transition().duration(300).style('opacity', high_opacity);
+    }
 };
 var anchor_facet = function(d){
-    TaxoView.draw(d)
+    var anchored_id = -1;
+    for(var i = 0; i < anchored_list.length; i++)
+    {
+        if(!anchored_list[i]['name'].localeCompare(d.name)){
+            anchored_id = i;
+            break;
+        }
+    }
+    if(anchored_id >= 0)
+    {
+        anchored_list.splice(anchored_id, 1);
+        d3.select(this).style('opacity', low_opacity);
+    }
+    else
+    {
+        anchored_list.push(d);
+        d3.select(this).style('opacity', high_opacity);
+    }
+    is_anchoring = (anchored_list.length > 0) ? 1 : 0;
+    TaxoView.draw(d);
     //console.log(d);
     //console.log(d3.select(this).data()[0]);
     //d3.select(this).transition().duration(200).style("opacity", 1);
     //console.log(d3.select(this));
 };
+var clickOnTitle = function(d){
+        TaxoView.draw(d);
+}
 var event_click = function() {
     var id_str = this.id;
     var event_id;
@@ -137,6 +174,16 @@ var hover_over_taxo = function(){
 };
 var hover_leave_taxo = function(){
 };
+var click_tree_node = function(d) {
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  TaxoView.draw(d);
+}
 var selected_treelist_2_taxo = function () {
 };
 var hover_over_info = function(){

@@ -5,18 +5,14 @@ var taxo = function (container) {
     var that = this;
     var container = container;
     var svg = container.append("svg").attr('width', 600).attr('height', 600);
-   // console.log(svg)
-    // TODO: init svg attributes
-
     this.draw = function (selected_treelist) {
         that.create(selected_treelist);
         that.update();
         that.remove();
-    }
+    };
     this.create = function (d) {
         var svg = d3.select('#block-1-1').select('svg');
         svg.selectAll("*").remove();
-        //console.log(svg)
         var treeData = d;
         // ************** Generate the tree diagram	 *****************
         var margin = {top: 50, right: 50, bottom: 50, left: 50},
@@ -39,7 +35,7 @@ var taxo = function (container) {
 
         // adds the links between the nodes
         var link = g.selectAll(".link")
-            .data( nodes.descendants().slice(1))
+            .data(nodes.descendants().slice(1))
           .enter().append("path")
             .attr("class", "link")
             .attr("d", function(d) {
@@ -47,8 +43,9 @@ var taxo = function (container) {
                  + "C" + d.x + "," + (d.y + d.parent.y) / 2
                  + " " + d.parent.x + "," +  (d.y + d.parent.y) / 2
                  + " " + d.parent.x + "," + d.parent.y;
-               });
-
+               }).style('opacity', 0);
+        link.transition().duration(500).style('opacity', 1);
+        //
         // adds each node as a group
         var node = g.selectAll(".node")
             .data(nodes.descendants())
@@ -57,11 +54,17 @@ var taxo = function (container) {
               return "node" +
                 (d.children ? " node--internal" : " node--leaf"); })
             .attr("transform", function(d) {
-              return "translate(" + d.x + "," + d.y + ")"; });
+              return "translate(" + d.x + "," + d.y + ")"; })
+            .style('opacity', 0).on('click', click_tree_node);
+        total_count = find_tree_size(nodes.data);
+        node.transition().duration(500).style('opacity', o = function(d){
+            var count = find_tree_size(d.data);
+            return Math.exp(count / (total_count / 0.69314718056)) - 0.8;
+        });
 
         // adds the circle to the node
         node.append("circle")
-          .attr("r", 10);
+          .attr("r", 10).style("fill", function(d) { return d.children ? "lightsteelblue" : "#fff"; }).style('opacity');
 
         // adds the text to the node
         node.append("text")
@@ -69,10 +72,10 @@ var taxo = function (container) {
           .attr("y", function(d) { return d.children ? -20 : 20; })
           .style("text-anchor", "middle")
           .text(function(d) { return d.data.name; });
-    }
+    };
     this.update = function () {
-    }
+    };
     this.remove = function () {
-    }
+    };
     // mouse over, mouse click, mouse leave
-}
+};
